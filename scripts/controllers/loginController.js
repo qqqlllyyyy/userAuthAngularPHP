@@ -13,7 +13,11 @@ app.controller("LoginController", function($scope, $http, $state){
 
 
 
+
+  //--------------------------------------------------------------------------------------
   // Sign Up Function
+  //--------------------------------------------------------------------------------------
+
   $scope.signUserUp = function() {
     var data = {
       username: $scope.signUpInfo.username,
@@ -24,9 +28,11 @@ app.controller("LoginController", function($scope, $http, $state){
       .post("backend/userAuthExe.php?action=signup", data)
       .success(function(response) {
         console.log(response);
-        // Save to localstorage
-        localStorage.setItem("user", JSON.stringify({user: response}));
-        $state.go("application");
+        if (response !== 'ERROR') {
+          // Save to localstorage
+          localStorage.setItem("token", JSON.stringify(response));
+          $state.go("application");
+        }
       })
       .error(function(error) {
         console.log(error);
@@ -35,7 +41,11 @@ app.controller("LoginController", function($scope, $http, $state){
 
 
 
-  // Login function
+
+  //--------------------------------------------------------------------------------------
+  // Login Function
+  //--------------------------------------------------------------------------------------
+  
   $scope.loginUser = function() {
     var data = {
       username: $scope.loginInfo.username,
@@ -46,8 +56,10 @@ app.controller("LoginController", function($scope, $http, $state){
       .post("backend/userAuthExe.php?action=login", data)
       .success(function(response) {
         console.log(response);
-        localStorage.setItem("user", JSON.stringify({user: response[0].Username}));
-        $state.go("application");
+        if (response !== 'ERROR') {
+          localStorage.setItem("token", JSON.stringify(response));
+          $state.go("application");
+        }
       })
       .error(function(error) {
         console.log(error);
